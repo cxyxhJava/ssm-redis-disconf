@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+>
+
+	<description>Spring Configuration</description>
+
+	<!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+	<context:component-scan base-package="com.frank.center"><!-- base-package 如果多个，用“,”分隔 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+<!--	<cache:annotation-driven cache-manager="cacheManager" />-->
+<!--	<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+
+	<!--<bean  id="jedisPoolConfig"  class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="${redis.pool.maxIdle}" />
+		<property name="maxTotal" value="${redis.pool.maxTotal}" />
+		<property name="minIdle" value="${redis.pool.minIdle}" />
+		<property name="maxWaitMillis" value="${redis.pool.maxWait}" />
+		<property name="testWhileIdle" value="${redis.pool.testWhileIdle}" />
+		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
+		<property name="testOnReturn" value="${redis.pool.testOnReturn}" />
+	</bean>
+
+	&lt;!&ndash; redis templet &ndash;&gt;
+	<bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.ip}"/>
+		<property name="port" value="${redis.port}"/>
+		<property name="password" value="${redis.password}"/>
+		<property name="usePool" value="true"/>
+		<property name="database" value="${redis.default.dbIndex}"/>
+	</bean>
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnFactory"/>
+	</bean>
+
+	&lt;!&ndash; spring自己的缓存管理器，这里定义了缓存位置名称 ，即注解中的value &ndash;&gt;
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="com.xinguang.xingchen.controlsystem.core.utils.RedisCache">
+					<property name="redisTemplate" ref="redisTemplate" />
+					<property name="name" value="${redis.name}"/>
+					<property name="liveTime" value="${redis.default.save.seconds}"/>
+				</bean>
+
+			</set>
+		</property>
+	</bean>
+-->
+
+	<!--&lt;!&ndash; 定义Hibernate Session工厂 &ndash;&gt;-->
+	<!--<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"> -->
+		<!--<property name="dataSource" ref="dataSource"/>-->
+		<!--<property name="packagesToScan" value="com.xinguang.xingchen.controlsystem.center.entity, com.xinguang.xingchen.controlsystem.core.persistence"/>&lt;!&ndash; 如果多个，用“,”分隔 &ndash;&gt;-->
+		<!--<property name="hibernateProperties">-->
+			<!--<props>-->
+				<!--<prop key="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCachingRegionFactory</prop>-->
+				<!--<prop key="hibernate.search.default.directory_provider">filesystem</prop>-->
+				<!--<prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>-->
+				<!--<prop key="hibernate.show_sql">${hibernate.showSql}</prop>-->
+				<!--&lt;!&ndash;<prop key="hibernate.format_sql">${hibernate.showSql}</prop>&ndash;&gt;-->
+				<!--<prop key="hibernate.use_sql_comments">${hibernate.showSql}</prop>-->
+			<!--</props>-->
+		<!--</property>-->
+		<!--<property name="namingStrategy">-->
+			<!--<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!--&lt;!&ndash; 定义事务 &ndash;&gt;-->
+	<!--<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">-->
+        <!--<property name="sessionFactory" ref="sessionFactory" />  -->
+    <!--</bean>-->
+    
+	<!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
+	<!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>-->
+	
+	<!-- 配置 JSR303 Bean Validator 定义 -->
+<!--	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+	&lt;!&ndash; Production 环境 &ndash;&gt;
+ 	<beans profile="production">-->
+ 		
+ 	    <!-- 数据源配置, 使用 BoneCP 数据库连接池 -->
+<!--
+		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		    &lt;!&ndash; 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass &ndash;&gt;
+		    <property name="driverClassName" value="${jdbc.driver}" />
+		    
+			&lt;!&ndash; 基本属性 url、user、password &ndash;&gt;
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			
+			&lt;!&ndash; 配置初始化大小、最小、最大 &ndash;&gt;
+			<property name="initialSize" value="${jdbc.pool.minIdle}" />
+			<property name="minIdle" value="${jdbc.pool.minIdle}" /> 
+			<property name="maxActive" value="${jdbc.pool.maxActive}" />
+			
+			&lt;!&ndash; 配置获取连接等待超时的时间 &ndash;&gt;
+			<property name="maxWait" value="60000" />
+			&lt;!&ndash; PScache &ndash;&gt;
+			<property name="maxOpenPreparedStatements" value="${jdbc.pool.maxOpenPreparedStatements}" />
+			
+			&lt;!&ndash; 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 &ndash;&gt;
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+			
+			&lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;
+			<property name="minEvictableIdleTimeMillis" value="300000" />
+			
+			<property name="validationQuery" value="SELECT 'x'" />
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="false" />
+			<property name="testOnReturn" value="false" />
+			
+			&lt;!&ndash; 配置监控统计拦截的filters &ndash;&gt;
+		    <property name="filters" value="stat" /> 
+		</bean>
+-->
+
+		<!--<bean id="springContextHolder" class="com.xinguang.xingchen.controlsystem.core.utils.SpringContextHolder" lazy-init="false" />-->
+		<!--<bean id="idGen" class="com.xinguang.xingchen.controlsystem.core.utils.IdGen" lazy-init="false" />-->
+	<bean id="test" class="com.frank.center.Test">
+		<property name="axe" value="hello" />
+	</bean>
+</beans>
