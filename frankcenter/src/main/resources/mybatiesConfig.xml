@@ -19,9 +19,9 @@
 
         <!-- 数据库连接 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://172.16.1.181:3306/xcsystem?characterEncoding=utf-8"
-                        userId="xctest"
-                        password="xctest">
+                        connectionURL="jdbc:mysql://tbbmysqldev.ops.com/mytest?characterEncoding=utf-8"
+                        userId="root"
+                        password="root">
         </jdbcConnection>
 
         <!-- 类型转换 -->
@@ -47,7 +47,7 @@
         </javaClientGenerator>
 
         <!-- 要对那些数据表进行生成操作，必须要有一个. -->
-        <table schema="xcsystem" tableName="category" domainObjectName="Category"
+        <table schema="mytest" tableName="category" domainObjectName="Category"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

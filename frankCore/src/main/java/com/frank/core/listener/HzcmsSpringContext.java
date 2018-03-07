@@ -16,6 +16,7 @@ public class HzcmsSpringContext implements ServletContextListener {
 		super();
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		springContext = WebApplicationContextUtils
 				.getWebApplicationContext(event.getServletContext());
@@ -23,6 +24,7 @@ public class HzcmsSpringContext implements ServletContextListener {
 		ConvertUtils.register(new DateConverter(null), java.util.Date.class);
 	}
 
+	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 	}
 
